@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Data</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        function onLoad() {
+            $.ajax({
+                url: "testData.json",
+                dataType: "JSON",
+                type: "POST",
+                async: false,
+                success: function(data) {
+                    console.log(data);
+                    var name = data.name[0].given[0] + " " + data.name[0].family[0];
+                    var orgName = data.managingOrganization.display;
+                    var patientGender = data.gender;
+                    var numConditions = data.conditions.length;
+                    var conditionsList = data.conditions;
+                    var conditionsListHTML = "";
+
+                    $("#patientName").html(name);
+                    $("#orgName").html(orgName);
+                    $("#patientGender").html(patientGender);
+                    $("#numConditions").html(numConditions);
+
+                    conditionsList.forEach( function(condition) {
+                        conditionsListHTML = conditionsListHTML + "<li>" + condition + "</li>";
+                    });
+
+                    $("#conditionsList").html(conditionsListHTML);
+                }
+            });
+        }
+    </script>
+</head>
+<body onload="onLoad()">
+Name of patient: <span id="patientName"></span><br>
+
+Organization name: <span id="orgName"></span><br>
+
+Gender: <span id="patientGender"></span><br>
+
+Number of conditions they have: <span id="numConditions"></span><br>
+
+List of all conditions:
+    <ul id="conditionsList"></ul>
+</body>
+</html>
